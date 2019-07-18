@@ -1,0 +1,31 @@
+apiVersion: apps/v1  # for k8s versions before 1.9.0 use apps/v1beta2  and before 1.8.0 use extensions/v1beta1
+kind: Deployment
+metadata:
+  name: storm-ui
+  labels:
+     name: storm-ui
+spec:
+  replicas: 1
+  selector:
+     matchLabels:
+        name: storm-ui
+        uses: nimbus
+  template:
+    metadata:
+      labels:
+        name: storm-ui
+        uses: nimbus
+    spec:
+      containers:
+      - name: storm-ui
+        image: daksher/storm-ui
+        resources:
+          limits:
+            cpu: 200m
+            memory: 500Mi
+          requests:
+            cpu: 100m
+            memory: 100Mi
+        ports:
+        - hostPort: 8080
+          containerPort: 8080

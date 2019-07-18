@@ -1,0 +1,15 @@
+---
+- hosts: all
+  tasks: 
+  - name: Reset Kubernetes
+    command: "dphys-swapfile swapoff && \
+     dphys-swapfile uninstall && \
+     update-rc.d dphys-swapfile remove
+     echo Adding ' cgroup_enable=cpuset cgroup_enable=memory' to /boot/cmdline.txt
+     cp /boot/cmdline.txt /boot/cmdline_backup.txt
+     orig='$(head -n1 /boot/cmdline.txt) cgroup_enable=cpuset cgroup_enable=memory'
+     echo $orig | tee /boot/cmdline.txt"
+    become: yes
+  - name: Permissions
+    command: "chmod -R a+rwx /tmp"
+    become: yes 
